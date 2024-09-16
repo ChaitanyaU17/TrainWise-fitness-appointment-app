@@ -60,3 +60,30 @@ export const assets = {
     cardio,
     yoga
 }
+
+export const specialityData = [
+    {
+        speciality: 'Evolve yoga',
+        image: yoga
+    },
+    {
+        speciality: 'Strength +',
+        image: strength
+    },
+    {
+        speciality: 'Dance fitness',
+        image: dance
+    },
+    {
+        speciality: 'Cardio HIIT',
+        image: cardio
+    },
+    {
+        speciality: 'Cycling boost',
+        image: cycling
+    },
+    {
+        speciality: 'Boxing endurance',
+        image: boxing
+    },
+]
