@@ -1,6 +1,64 @@
-
+import { useState } from "react";
+import { ToastContainer, toast } from 'react-toastify';
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const [state, setState] = useState("Sign Up");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [error, setError] = useState(null);
+
+  const navigate = useNavigate();
+
+  const signUpUrl = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBM6iwWRs8F6wTNcCXCsX8P97vDVsxiTMY`;
+  const loginUrl = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBM6iwWRs8F6wTNcCXCsX8P97vDVsxiTMY`;
+  
+  const onSubmitHandler = async (event) => {
+    event.preventDefault();
+    
+    const payload = {
+      email,
+      password,
+      returnSecureToken: true,
+      ...(state === "Sign Up" && { displayName: name }), // Add displayName only for sign up
+    };
+  
+    try {
+      const response = await fetch(state === "Sign Up" ? signUpUrl : loginUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error?.message || "Network response was not ok");
+      }
+      
+      if (data.error) {
+        setError(data.error.message);
+        toast.error(data.error.message); // Show error notification
+      } else {
+        setError(null); // Clear any previous errors
+  
+        // Handle successful login/signup (e.g., redirect or save token)
+        localStorage.setItem("token", data.idToken);
+        localStorage.setItem("email", email);
+  
+        toast.success(state === "Sign Up" ? "Account created successfully!" : "Logged in successfully!"); // Show success notification
+      }
+
+      setTimeout(() => navigate('/'), 2000)
+      
+    } catch (error) {
+      setError(error.message || "An error occurred");
+      toast.error(error.message || "An error occurred"); // Show error notification
+    }
+  };
     return (
         <>
         <form className="min-h-[80vh] flex items-center" onSubmit={onSubmitHandler}>
