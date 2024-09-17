@@ -1,21 +1,47 @@
-import React from 'react'
+// import React from 'react'
+
+import { useContext, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { AppContext } from "../context/AppContext";
+import LazyLoad from "react-lazyload";
 
 const Trainers = () => {
+  const navigate = useNavigate();
+  const { speciality } = useParams();
+  const [filterTrainers, setFilterTrainers] = useState([]);
+  const [showFilter, setShowFilter] = useState(false);
+  const { trainers } = useContext(AppContext);
+
+  const applyFilter = () => {
+    if (speciality) {
+      setFilterTrainers(
+        trainers.filter((trainer) => trainer.speciality === speciality)
+      );
+    } else {
+      setFilterTrainers(trainers);
+    }
+  };
+
+  useEffect(() => {
+    applyFilter();
+  }, [trainers, speciality]);
+
+  // console.log(speciality);
   return (
     <div className="text-gray-600">
       <p>Browse through the fitness trainers specialist.</p>
       <div className="flex flex-col sm:flex-row items-start gap-5 mt-5">
         <button
           className={`py-1 px-3 border rounded text-sm transition-all sm:hidden ${
-           
+            showFilter ? "bg-primary text-white" : ""
           }`}
-         
+          onClick={() => setShowFilter((prev) => !prev)}
         >
           Filters
         </button>
         <div
           className={` flex-col gap-4 text-sm text-gray-600 ${
-           
+            showFilter ? "flex" : "hidden sm:flex"
           }`}
         >
           <p
@@ -117,6 +143,6 @@ const Trainers = () => {
       </div>
     </div>
   );
-}
+};
 
 export default Trainers;
