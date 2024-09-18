@@ -1,8 +1,105 @@
+// import React from 'react'
+
+import { useContext, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { AppContext } from "../context/AppContext";
+import { assets } from "../assets/assets";
+import RelatedTrainers from "../components/RelatedTrainers";
+
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import LazyLoad from "react-lazyload";
+
 
 const Appointment = () => {
+  const { trainerId } = useParams();
+  const { trainers, currencySymbol } = useContext(AppContext);
+  const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
+
+  const [trainerInfo, setTrainerInfo] = useState(null);
+
+  const [trainerSlots, setTrainerSlots] = useState([]);
+  const [slotIndex, setSlotIndex] = useState(0);
+  const [slotTime, setSlotTime] = useState("");
+
+  const fetchTrainerInfo = async () => {
+    const trainerInfo = trainers.find((trainer) => trainer._id === trainerId);
+    setTrainerInfo(trainerInfo);
+    // console.log(trainerInfo);
+  };
+
+  const getAvaliableSlots = async () => {
+    setTrainerSlots([]);
+
+    let today = new Date();
+
+    for (let i = 0; i < 7; i++) {
+      // getting date with index
+      let currentDate = new Date(today);
+      currentDate.setDate(today.getDate() + i);
+
+      // setting end time of the date with index
+      let endTime = new Date();
+      endTime.setDate(today.getDate() + i);
+      endTime.setHours(24, 0, 0, 0);
+
+      //setting hours
+      if (today.getDate() === currentDate.getDate()) {
+        currentDate.setHours(
+          currentDate.getHours() > 10 ? currentDate.getHours() + 1 : 10
+        );
+        currentDate.setMinutes(currentDate.getMinutes() > 30 ? 30 : 0);
+      } else {
+        currentDate.setHours(10);
+        currentDate.setMinutes(0);
+      }
+
+      let timeSlots = [];
+
+      while (currentDate < endTime) {
+        let formattedTime = currentDate.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+
+        //add slot to array
+        timeSlots.push({
+          datetime: new Date(currentDate),
+          time: formattedTime,
+        });
+
+        //increment current time by 30 minutes
+        currentDate.setMinutes(currentDate.getMinutes() + 30);
+      }
+
+      setTrainerSlots((prev) => [...prev, timeSlots]);
+    }
+  };
+
+  useEffect(() => {
+    fetchTrainerInfo();
+  }, [trainers, trainerId]);
+
+  useEffect(() => {
+    getAvaliableSlots();
+  }, [trainerInfo]);
+
+  useEffect(() => {
+    console.log(trainerSlots);
+  }, [trainerSlots]);
+
+  const handleBooking = () => {
+    if (slotTime) {
+      toast.success("Appointment booked successfully!");
+    } else {
+      toast.error("Please select a time slot.");
+    }
+  };
+  
+
   return (
-    <div>
-       <div>
+    trainerInfo && (
+      <div>
         {/* ------ trainer Details ----- */}
         <div className="flex flex-col gap-4 sm:flex-row">
           <div>
@@ -30,6 +127,7 @@ const Appointment = () => {
                 {trainerInfo.experience}
               </button>
             </div>
+
             {/* ---- trainer About ----- */}
             <div>
               <p className="flex items-center gap-1 text-sm font-medium text-gray-900 mt-3">
@@ -48,6 +146,7 @@ const Appointment = () => {
             </p>
           </div>
         </div>
+
         {/* ---- Booking Slots --- */}
         <div className="sm:ml-72 sm:pl-4 mt-4 font-medium text-gray-700">
           <p>Booking Slots</p>
@@ -83,9 +182,12 @@ const Appointment = () => {
           <button onClick={() => handleBooking()} className="bg-primary text-white text-sm font-light px-14 py-3 rounded-full my-6">Book an Appointment</button>
           <ToastContainer />
         </div>
-        </div>
-    </div>
-  )
-}
+
+        {/* --- listing related Trainers --- */}
+        <RelatedTrainers trainerId={trainerId} speciality={trainerInfo.speciality} />
+      </div>
+    )
+  );
+};
 
 export default Appointment;
