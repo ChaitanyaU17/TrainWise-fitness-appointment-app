@@ -1,6 +1,21 @@
-import React from 'react'
+import { useContext, useEffect, useState } from "react";
+import { AppContext } from "../context/AppContext";
+import { useNavigate } from "react-router-dom";
+import LazyLoad from "react-lazyload";
 
-const RelatedTrainers = () => {
+const RelatedTrainers = ({ trainerId, speciality }) => {
+  const navigate = useNavigate();
+  const { trainers } = useContext(AppContext);
+  const [relTrainers, setRelTrainers] = useState([]);
+
+  useEffect(() => {
+    if (trainers.length > 0 && speciality) {
+      const trainersData = trainers.filter(
+        (trainer) => trainer.speciality === speciality && trainer._id !== trainerId
+      );
+      setRelTrainers(trainersData);
+    }
+  }, [trainers, speciality, trainerId]);
   return (
     <div className="flex flex-col items-center gap-4 my-16 text-gray-900 md:mx-10">
       <h1 className="text-3xl font-medium">Top Fitness Trainers to Book</h1>
