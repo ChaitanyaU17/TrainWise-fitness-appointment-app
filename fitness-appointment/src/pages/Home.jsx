@@ -4,6 +4,7 @@
 import Header from "../components/Header";
 import SpecialityMenu from "../components/SpecialityMenu";
 import TopTrainers from "../components/TopTrainers";
+import Banner from '../components/Banner';
 
 
 const Home = () => {
@@ -12,6 +13,7 @@ const Home = () => {
       <Header />
       <SpecialityMenu />
       <TopTrainers />
+      <Banner />
     </div>
   )
 }
