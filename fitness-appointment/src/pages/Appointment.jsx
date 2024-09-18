@@ -30,9 +30,25 @@ const Appointment = () => {
                 {trainerInfo.experience}
               </button>
             </div>
+            {/* ---- trainer About ----- */}
+            <div>
+              <p className="flex items-center gap-1 text-sm font-medium text-gray-900 mt-3">
+                About <img src={assets.info_icon} alt="" />
+              </p>
+              <p className="text-sm text-gray-500 max-w-[700px] mt-1">
+                {trainerInfo.about}
+              </p>
             </div>
-            </div>
-            </div>
+            <p className="text-gray-500 font-medium mt-4">
+              Appointment fee:{" "}
+              <span className="text-gray-600">
+                {currencySymbol}
+                {trainerInfo.fees}
+              </span>
+            </p>
+          </div>
+        </div>
+        </div>
     </div>
   )
 }
