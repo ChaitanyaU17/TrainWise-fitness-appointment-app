@@ -5,7 +5,7 @@ import { useState } from "react";
 
 const MyProfile = () => {
   const [userData, setUserData] = useState({
-    name: "Edward Vincent",
+    name: "Chaitanya Umbarkar",
     image: assets.profile_pic,
     email: "chaitanyaumbarkar2002@gmail.com",
     phone: "+1 787 322 7889",
