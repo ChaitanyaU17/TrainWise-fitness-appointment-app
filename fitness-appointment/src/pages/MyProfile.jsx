@@ -1,6 +1,23 @@
-import React from 'react'
+// import React from 'react'
+import LazyLoad from "react-lazyload";
+import { assets } from "../assets/assets";
+import { useState } from "react";
 
 const MyProfile = () => {
+  const [userData, setUserData] = useState({
+    name: "Edward Vincent",
+    image: assets.profile_pic,
+    email: "chaitanyaumbarkar2002@gmail.com",
+    phone: "+1 787 322 7889",
+    address: {
+      line1: "Sant colony, 45",
+      line2: "Ahmednagar, Maharashtra",
+    },
+    gender: "Male",
+    dob: "2000-06-17",
+  });
+
+  const [isEdit, setIsEdit] = useState(false);
   return (
     <div className="max-w-lg flex flex-col gap-2 text-sm ">
       <LazyLoad>
