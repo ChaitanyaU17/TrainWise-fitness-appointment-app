@@ -1,6 +1,11 @@
-import React from 'react'
+// import React from 'react'
+import { useContext } from "react";
+import { AppContext } from '../context/AppContext';  // Fixed context import typo
+import LazyLoad from "react-lazyload";
 
 const MyAppointments = () => {
+  const { trainers } = useContext(AppContext);  // Accessing trainers from context
+
   return (
     <div className="pb-3 mt-12 font-medium text-zinc-700 border-b">
       <p>My Appointments</p>
@@ -33,7 +38,7 @@ const MyAppointments = () => {
         ))}
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default MyAppointments;
