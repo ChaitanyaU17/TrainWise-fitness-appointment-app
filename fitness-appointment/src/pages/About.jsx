@@ -13,7 +13,12 @@ const About = () => {
       </div>
 
       <div className="flex flex-col my-10 md:flex-row gap-12">
-        <LazyLoad>
+        <LazyLoad
+         height={201} // Set height for LazyLoad placeholder
+         offset={100} // Start loading image when it's 100px before coming into view
+         once // Load only once when the image first becomes visible
+         placeholder={<div className="bg-gray-300 h-[201px] w-full" />}
+        >
         <img className="w-full md:max-w-[360px]" src={assets.about} alt="" />
         </LazyLoad>
         <div className="flex flex-col justify-center gap-6 md:w-2/4 text-sm text-gray-600">

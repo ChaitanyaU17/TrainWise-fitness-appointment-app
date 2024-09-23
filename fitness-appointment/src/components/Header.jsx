@@ -3,7 +3,7 @@ import LazyLoad from 'react-lazyload';
 
 const Header = () => {
   return (
-    <LazyLoad offset={200}>
+    <LazyLoad offset={200} once>
       <div
         style={{
           backgroundImage: `url(${assets.heroimgone})`,
@@ -19,7 +19,7 @@ const Header = () => {
             Book Online Training Sessions <br /> With Fitness Experts
           </p>
           <div className="flex flex-col md:flex-row items-center gap-3 text-white text-sm font-light">
-            <LazyLoad height={100} offset={100}>
+            <LazyLoad height={100} offset={100} once>
               <img className="w-28" src={assets.group_profiles} alt="group profiles" />
             </LazyLoad>
             <p>
@@ -33,7 +33,7 @@ const Header = () => {
             href="#speciality"
           >
             Book Appointment{" "}
-            <LazyLoad height={20} offset={100}>
+            <LazyLoad height={20} offset={100} once>
               <img className="w-3" src={assets.arrow_icon} alt="arrow icon" />
             </LazyLoad>
           </a>

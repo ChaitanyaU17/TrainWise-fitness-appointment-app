@@ -21,8 +21,13 @@ const MyProfile = () => {
 
   return (
     <div className="max-w-lg flex flex-col gap-2 text-sm ">
-      <LazyLoad>
-      <img className="w-36 rounded" src={userData.image} alt="" />
+      <LazyLoad
+        height={201} // Set height for LazyLoad placeholder
+        offset={100} // Start loading image when it's 100px before coming into view
+        once // Load only once when the image first becomes visible
+        placeholder={<div className="bg-gray-300 h-[201px] w-full" />}
+      >
+        <img className="w-36 rounded" src={userData.image} alt="" />
       </LazyLoad>
       {isEdit ? (
         <input
@@ -34,7 +39,9 @@ const MyProfile = () => {
           }
         />
       ) : (
-        <p className="font-medium text-3xl text-neutral-800 mt-4">{userData.name}</p>
+        <p className="font-medium text-3xl text-neutral-800 mt-4">
+          {userData.name}
+        </p>
       )}
 
       <hr className="bg-zinc-400 h-[1px] border-none " />
@@ -60,7 +67,7 @@ const MyProfile = () => {
           {isEdit ? (
             <p>
               <input
-              className="bg-gray-50"
+                className="bg-gray-50"
                 onChange={(e) =>
                   setUserData((prev) => ({
                     ...prev,
@@ -72,7 +79,7 @@ const MyProfile = () => {
               />
               <br />
               <input
-              className="bg-gray-50"
+                className="bg-gray-50"
                 onChange={(e) =>
                   setUserData((prev) => ({
                     ...prev,
@@ -98,7 +105,7 @@ const MyProfile = () => {
           <p className="font-medium">Gender:</p>
           {isEdit ? (
             <select
-            className="max-w-20 bg-gray-100"
+              className="max-w-20 bg-gray-100"
               onChange={(e) =>
                 setUserData((prev) => ({ ...prev, gender: e.target.value }))
               }
@@ -113,7 +120,7 @@ const MyProfile = () => {
           <p className="font-medium">Birthday:</p>
           {isEdit ? (
             <input
-            className="max-w-20 bg-gray-100"
+              className="max-w-20 bg-gray-100"
               type="date"
               onChange={(e) =>
                 setUserData((prev) => ({ ...prev, dob: e.target.value }))
@@ -128,9 +135,19 @@ const MyProfile = () => {
 
       <div className="mt-10">
         {isEdit ? (
-          <button className="border border-primary px-8 py-2 rounded-full hover:bg-primary hover:text-[#f97000] transition-all" onClick={() => setIsEdit(false)}>Save Information</button>
+          <button
+            className="border border-primary px-8 py-2 rounded-full hover:bg-primary hover:text-[#f97000] transition-all"
+            onClick={() => setIsEdit(false)}
+          >
+            Save Information
+          </button>
         ) : (
-          <button className="border border-primary px-8 py-2 rounded-full hover:bg-primary hover:text-[#f97000] transition-all" onClick={() => setIsEdit(true)}>Edit</button>
+          <button
+            className="border border-primary px-8 py-2 rounded-full hover:bg-primary hover:text-[#f97000] transition-all"
+            onClick={() => setIsEdit(true)}
+          >
+            Edit
+          </button>
         )}
       </div>
     </div>

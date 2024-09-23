@@ -11,8 +11,17 @@ const Contact = () => {
       </div>
 
       <div className="my-10 flex flex-col justify-center md:flex-row gap-10 mb-28 text-sm">
-        <LazyLoad>
-        <img className="w-full md:max-w-[360px] object-cover" src={assets.contact} alt="" />
+        <LazyLoad
+          height={201} // Set height for LazyLoad placeholder
+          offset={100} // Start loading image when it's 100px before coming into view
+          once // Load only once when the image first becomes visible
+          placeholder={<div className="bg-gray-300 h-[201px] w-full" />}
+        >
+          <img
+            className="w-full md:max-w-[360px] object-cover"
+            src={assets.contact}
+            alt=""
+          />
         </LazyLoad>
         <div className="flex flex-col justify-center items-start gap-6">
           <p className="font-semibold text-lg text-gray-600">OUR OFFICE</p>
@@ -22,9 +31,18 @@ const Contact = () => {
           <p className="text-gray-500">
             Tel: (212) 417-8899 <br /> Email: chaitanyaumbarkar2002@gmail.com
           </p>
-          <p className="font-semibold text-lg text-gray-600">Careers at PRESCRIPTO</p>
-          <p className="text-gray-500">Learn more about aur teams and job openings.</p>
-          <button className="border border-black px-8 py-4 text-sm hover:bg-black hover:text-[#f97000] transition-all duration-500"> <a href="https://www.linkedin.com/in/chaitanya-umbarkar-323470239">Explore Jobs</a></button>
+          <p className="font-semibold text-lg text-gray-600">
+            Careers at PRESCRIPTO
+          </p>
+          <p className="text-gray-500">
+            Learn more about aur teams and job openings.
+          </p>
+          <button className="border border-black px-8 py-4 text-sm hover:bg-black hover:text-[#f97000] transition-all duration-500">
+            {" "}
+            <a href="https://www.linkedin.com/in/chaitanya-umbarkar-323470239">
+              Explore Jobs
+            </a>
+          </button>
         </div>
       </div>
     </div>

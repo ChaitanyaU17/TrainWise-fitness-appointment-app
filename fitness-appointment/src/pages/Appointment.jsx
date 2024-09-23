@@ -10,7 +10,6 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import LazyLoad from "react-lazyload";
 
-
 const Appointment = () => {
   const { trainerId } = useParams();
   const { trainers, currencySymbol } = useContext(AppContext);
@@ -95,7 +94,6 @@ const Appointment = () => {
       toast.error("Please select a time slot.");
     }
   };
-  
 
   return (
     trainerInfo && (
@@ -103,20 +101,30 @@ const Appointment = () => {
         {/* ------ trainer Details ----- */}
         <div className="flex flex-col gap-4 sm:flex-row">
           <div>
-            <LazyLoad>
-            <img
-              className="bg-primary w-full sm:max-w-72 rounded-lg"
-              src={trainerInfo.image}
-              alt=""
-            />
+            <LazyLoad
+              height={201} // Set height for LazyLoad placeholder
+              offset={100} // Start loading image when it's 100px before coming into view
+              once // Load only once when the image first becomes visible
+              placeholder={<div className="bg-gray-300 h-[201px] w-full" />}
+            >
+              <img
+                className="bg-primary w-full sm:max-w-72 rounded-lg"
+                src={trainerInfo.image}
+                alt=""
+              />
             </LazyLoad>
           </div>
           <div className="flex1 border border-gray-400 rounded-lg p-8 py-7 bg-white mx-2 sm:mx-0 mt-[-80px] sm:mt-0">
             {/* -----trainer Info = name, degree, experience ----- */}
             <p className="flex items-center gap-2 text-2xl font-medium text-gray-900">
               {trainerInfo.name}{" "}
-              <LazyLoad>
-              <img className="w-5" src={assets.verified_icon} alt="" />
+              <LazyLoad
+                height={201} // Set height for LazyLoad placeholder
+                offset={100} // Start loading image when it's 100px before coming into view
+                once // Load only once when the image first becomes visible
+                placeholder={<div className="bg-gray-300 h-[201px] w-full" />}
+              >
+                <img className="w-5" src={assets.verified_icon} alt="" />
               </LazyLoad>
             </p>
             <div className="flex items-center gap-2 text-sm mt-1 text-gray-600">
@@ -172,19 +180,31 @@ const Appointment = () => {
               trainerSlots[slotIndex].map((item, index) => (
                 <p
                   onClick={() => setSlotTime(item.time)}
-                  className={`text-sm font-light flex-shrink-0 px-5 py-2 rounded-full cursor-pointer ${item.time === slotTime ? 'bg-primary text-white' : 'text-gray-400 border border-gray-300'}`}
+                  className={`text-sm font-light flex-shrink-0 px-5 py-2 rounded-full cursor-pointer ${
+                    item.time === slotTime
+                      ? "bg-primary text-white"
+                      : "text-gray-400 border border-gray-300"
+                  }`}
                   key={index}
                 >
                   {item.time.toLowerCase()}
                 </p>
               ))}
           </div>
-          <button onClick={() => handleBooking()} className="bg-primary text-white text-sm font-light px-14 py-3 rounded-full my-6">Book an Appointment</button>
+          <button
+            onClick={() => handleBooking()}
+            className="bg-primary text-white text-sm font-light px-14 py-3 rounded-full my-6"
+          >
+            Book an Appointment
+          </button>
           <ToastContainer />
         </div>
 
         {/* --- listing related Trainers --- */}
-        <RelatedTrainers trainerId={trainerId} speciality={trainerInfo.speciality} />
+        <RelatedTrainers
+          trainerId={trainerId}
+          speciality={trainerInfo.speciality}
+        />
       </div>
     )
   );

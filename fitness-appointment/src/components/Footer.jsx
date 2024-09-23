@@ -9,7 +9,12 @@ const Footer = () => {
         {/* --- left section --- */}
         <div>
           <p className="flex items-center text-4xl font-black text-[#f97000]">
-            <LazyLoad>
+            <LazyLoad
+             height={201} // Set height for LazyLoad placeholder
+             offset={100} // Start loading image when it's 100px before coming into view
+             once // Load only once when the image first becomes visible
+             placeholder={<div className="bg-gray-300 h-[201px] w-full" />}
+            >
             <img className="mb-5 w-40" src={assets.logo} alt="" />
             </LazyLoad>
             

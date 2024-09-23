@@ -126,8 +126,17 @@ const Trainers = () => {
               className="border border-blue-200 rounded-xl overflow-hidden cursor-pointer hover:translate-y-[-10px] transition-all duration-500"
               key={index}
             >
-              <LazyLoad>
-                <img className="h-[220px] w-[400px] object-cover" src={item.image} alt="" />
+              <LazyLoad
+                height={201} // Set height for LazyLoad placeholder
+                offset={100} // Start loading image when it's 100px before coming into view
+                once // Load only once when the image first becomes visible
+                placeholder={<div className="bg-gray-300 h-[201px] w-full" />}
+              >
+                <img
+                  className="h-[220px] w-[400px] object-cover"
+                  src={item.image}
+                  alt=""
+                />
               </LazyLoad>
               <div className="p-4">
                 <div className="flex items-center gap-2 text-sm text-center text-green-500">

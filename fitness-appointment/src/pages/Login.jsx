@@ -52,7 +52,11 @@ const Login = () => {
         toast.success(state === "Sign Up" ? "Account created successfully!" : "Logged in successfully!"); // Show success notification
       }
 
-      setTimeout(() => navigate('/'), 2000)
+      if (state === "Sign Up") {
+        navigate('/login'); // Navigate to login after sign-up success
+      } else {
+        navigate('/'); // Navigate to home after login success
+      }
       
     } catch (error) {
       setError(error.message || "An error occurred");

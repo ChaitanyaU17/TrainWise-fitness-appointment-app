@@ -22,7 +22,12 @@ const SpecialityMenu = () => {
             key={index}
             to={`trainers/${item.speciality}`}
           >
-            <LazyLoad>
+            <LazyLoad
+             height={201} // Set height for LazyLoad placeholder
+             offset={100} // Start loading image when it's 100px before coming into view
+             once // Load only once when the image first becomes visible
+             placeholder={<div className="bg-gray-300 h-[201px] w-full" />}
+            >
             <img
               className="w-16 sm:w-24 mb-2 rounded-full"
               src={item.image}
