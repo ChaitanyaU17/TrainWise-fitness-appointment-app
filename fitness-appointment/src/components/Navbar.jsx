@@ -11,7 +11,7 @@ const Navbar = () => {
 
   return (
     <div className="flex items-center justify-between text-sm py-4 mb-5 border-b border-gray-100">
-      <p className="flex items-center font-black text-xl text-[#f97000]">
+      <p className="flex items-center cursor-pointer font-black text-xl text-[#f97000]" onClick={() => navigate("/")}>
         <LazyLoad>
           <img
             onClick={() => navigate("/")}
@@ -101,9 +101,17 @@ const Navbar = () => {
           } md:hidden top-0 right-0 bottom-0 z-20 overflow-hidden bg-white transition-all`}
         >
           <div className="flex items-center justify-between px-5 py-6 ">
-            <LazyLoad>
-              <img className="w-36" src={assets.logo} alt="" />
-            </LazyLoad>
+          <p className="flex items-center font-black text-xl text-[#f97000]">
+        <LazyLoad>
+          <img
+            className="w-16 cursor-pointer"
+            src={assets.logo}
+            alt=""
+          />
+        </LazyLoad>
+        TrainWise
+      </p>
+
             <LazyLoad>
               <img
                 className="w-7"
