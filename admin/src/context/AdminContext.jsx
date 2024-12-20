@@ -1,18 +1,28 @@
+/* eslint-disable react-refresh/only-export-components */
 /* eslint-disable react/prop-types */
 
-import { createContext } from "react";
+
+import { useState, createContext } from "react";
 
 export const AdminContext = createContext();
 
 const AdminContextProvider = (props) => {
-    const value = {
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+  
+  const [aToken, setAToken] = useState(localStorage.getItem('aToken') ? localStorage.getItem('aToken') : '')
 
-    }
-    return (
-        <AdminContext.Provider value={value} >
-            {props.children}
-        </AdminContext.Provider>
-    )
-}
+  
+
+  const value = {
+    aToken,
+    setAToken,
+    backendUrl,
+  };
+  return (
+    <AdminContext.Provider value={value}>
+      {props.children}
+    </AdminContext.Provider>
+  );
+};
 
 export default AdminContextProvider;
