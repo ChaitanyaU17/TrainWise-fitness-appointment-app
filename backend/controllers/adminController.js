@@ -80,4 +80,17 @@ const loginAdmin = async (req, res) => {
 
 }
 
-export { addTrainer, loginAdmin };
+//API to get all trainer list for admin panel
+
+const allTrainers = async (req, res) => {
+    try {
+        const trainers = await trainerModel.find({}).select('-password');   
+        res.json({success:true, trainers});
+    } catch (error) {
+        console.log(error);
+        res.json({success:false, message:error.message});
+    }
+}
+
+export { addTrainer, loginAdmin, allTrainers };
+ 
