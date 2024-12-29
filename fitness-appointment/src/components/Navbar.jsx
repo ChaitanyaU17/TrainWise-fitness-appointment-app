@@ -1,13 +1,20 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { assets } from "../assets/assets";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import LazyLoad from "react-lazyload";
+import { AppContext } from "../context/AppContext";
 
 const Navbar = () => {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
-  const [showMenu, setShowMenu] = useState(false);
-  const [token, setToken] = useState(true);
+  const [showMenu, setShowMenu] = useState(false)
+  const { token, setToken, userData } = useContext(AppContext)
+
+  const logout = () => {
+    localStorage.removeItem('token')
+    setToken(false)
+    navigate('/login')
+  }
 
   return (
     <div className="flex items-center justify-between text-sm py-4 mb-5 border-b border-gray-100">
@@ -70,7 +77,7 @@ const Navbar = () => {
                   My Appointments
                 </p>
                 <p
-                  onClick={() => setToken(false)}
+                  onClick={logout}
                   className="hover:text-black cursor-pointer"
                 >
                   Logout
