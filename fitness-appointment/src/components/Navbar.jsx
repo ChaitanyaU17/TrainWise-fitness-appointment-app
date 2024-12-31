@@ -49,12 +49,12 @@ const Navbar = () => {
         </NavLink>
       </ul>
       <div className="flex items-center gap-4">
-        {token ? (
+        {token && userData ? (
           <div className="flex items-center gap-2 cursor-pointer group relative">
             <LazyLoad>
               <img
                 className="w-8 rounded-full"
-                src={assets.profile_pic}
+                src={userData.image}
                 alt=""
               />
             </LazyLoad>
