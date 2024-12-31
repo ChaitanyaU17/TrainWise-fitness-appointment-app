@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { createContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import axios from 'axios'
@@ -33,37 +34,37 @@ const AppContextProvider = (props) => {
 
     }
 
-    // Getting User Profile using API
-    const loadUserProfileData = async () => {
+  // Getting User Profile using API
+  const loadUserProfileData = async () => {
 
-        try {
+    try {
 
-            const { data } = await axios.get(backendUrl + '/api/user/get-profile', { headers: { token } })
+        const { data } = await axios.get(backendUrl + '/api/user/get-profile', { headers: { token } })
 
-            if (data.success) {
-                setUserData(data.userData)
-            } else {
-                toast.error(data.message)
-            }
-
-        } catch (error) {
-            console.log(error)
-            toast.error(error.message)
+        if (data.success) {
+            setUserData(data.userData)
+        } else {
+            toast.error(data.message)
         }
 
+    } catch (error) {
+        console.log(error)
+        toast.error(error.message)
     }
 
-    useEffect(() => {
-        getTrainersData()
-    }, [])
+}
 
-    useEffect(() => {
-        if (token) {
-            loadUserProfileData()
-        } else {
-            setUserData(false);
-        }
-    }, [token])
+useEffect(() => {
+    getTrainersData()
+}, [])
+
+useEffect(() => {
+    if (token) {
+        loadUserProfileData()
+    } else {
+        setUserData(false);
+    }
+}, [token])
 
     const value = {
         trainers, getTrainersData,
