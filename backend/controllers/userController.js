@@ -3,6 +3,8 @@ import bcrypt from 'bcrypt';
 import userModel from '../models/userModel.js';
 import jwt from 'jsonwebtoken';
 import { v2 as cloudinary } from 'cloudinary';
+import trainerModel from '../models/trainerModel.js';
+import appointmentModel from '../models/appointmentModel.js';
 
 //API to register user
 const registerUser = async (req, res) => {
@@ -117,10 +119,69 @@ const updateProfile = async (req, res) => {
         }
 
         return res.json({ success: true, message: 'Profile Updated' });
+        
     } catch (error) {
         console.error(error);
         return res.status(500).json({ success: false, message: error.message });
     }
 };
 
-export { registerUser, loginUser, getProfile, updateProfile };
+//API to book appointment
+const bookAppointment = async (req, res) => {
+
+    try {
+
+        const { userId, trainerId, slotDate, slotTime } = req.body
+
+        const trainerData = await trainerModel.findById(trainerId).select("-password")
+
+        if (!trainerData.available) {
+            return res.json({ success: false, message: 'Trainer Not Available' })
+        }
+
+        let slots_booked = trainerData.slots_booked
+
+        // checking for slot availablity 
+        if (slots_booked[slotDate]) {
+            if (slots_booked[slotDate].includes(slotTime)) {
+                return res.json({ success: false, message: 'Slot Not Available' })
+            }
+            else {
+                slots_booked[slotDate].push(slotTime)
+            }
+        } else {
+            slots_booked[slotDate] = []
+            slots_booked[slotDate].push(slotTime)
+        }
+
+        const userData = await userModel.findById(userId).select("-password")
+
+        delete trainerData.slots_booked
+
+        const appointmentData = {
+            userId,
+            trainerId,
+            userData,
+            trainerData,
+            amount: trainerData.fees,
+            slotTime,
+            slotDate,
+            date: Date.now()
+        }
+
+        const newAppointment = new appointmentModel(appointmentData)
+        await newAppointment.save()
+
+        // save new slots data in docData
+        await trainerModel.findByIdAndUpdate(trainerId, { slots_booked })
+
+        res.json({ success: true, message: 'Appointment Booked' })
+
+    } catch (error) {
+        console.log(error)
+        res.json({ success:false, message: error.message })
+    }
+
+}
+
+export { registerUser, loginUser, getProfile, updateProfile, bookAppointment };
