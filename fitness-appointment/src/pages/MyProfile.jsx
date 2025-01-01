@@ -2,7 +2,9 @@
 import LazyLoad from "react-lazyload";
 import { useState, useContext } from "react";
 import { AppContext } from "../context/AppContext";
-import {assets} from '../assets/assets'
+import { assets } from "../assets/assets";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const MyProfile = () => {
   const { userData, setUserData, token, backendUrl, loadUserProfileData } =
@@ -10,7 +12,39 @@ const MyProfile = () => {
   const [isEdit, setIsEdit] = useState(false);
   const [image, setImage] = useState(false);
 
-  const updateUserProfileData = async () => {};
+  const updateUserProfileData = async () => {
+    try {
+      const formData = new FormData();
+
+      formData.append("name", userData.name);
+      formData.append("phone", userData.phone);
+      formData.append("address", JSON.stringify(userData.address));
+      formData.append("dob", userData.dob);
+      formData.append("gender", userData.gender);
+
+      image && formData.append("image", image);
+
+      const { data } = await axios.post(
+        backendUrl + "/api/user/update-profile",
+        formData,
+        { headers: { token } }
+      );
+
+      if (data.success) {
+        toast.success(data.message);
+
+        await loadUserProfileData();
+
+        setIsEdit(false);
+        setImage(false);
+      } else {
+        toast.error(data.message);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(error.response?.data?.message || "An error occurred");
+    }
+  };
 
   return (
     userData && (
@@ -18,10 +52,26 @@ const MyProfile = () => {
         {isEdit ? (
           <label htmlFor="image">
             <div className="inline-block relative cursor-pointer">
-              <img className="w-36 rounded opacity-75" src={image ? URL.createObjectURL(image) : userData.image} alt="" />
-              <img className="w-10 absolute bottom-12 right-12" src={image ? "" : assets.upload_icon} alt="" />
+              <img
+                className="w-36 rounded opacity-75"
+                src={image ? URL.createObjectURL(image) : userData.image}
+                alt=""
+              />
+              <img
+                className="w-10 absolute bottom-12 right-12"
+                src={image ? "" : assets.upload_icon}
+                alt=""
+              />
             </div>
-            <input onChange={(e) => {setImage(e.target.files[0])}} type="file" name="" id="image" hidden />
+            <input
+              onChange={(e) => {
+                setImage(e.target.files[0]);
+              }}
+              type="file"
+              name=""
+              id="image"
+              hidden
+            />
           </label>
         ) : (
           <LazyLoad
@@ -142,7 +192,7 @@ const MyProfile = () => {
           {isEdit ? (
             <button
               className="border border-primary px-8 py-2 rounded-full hover:bg-primary hover:text-[#f97000] transition-all"
-              onClick={() => setIsEdit(false)}
+              onClick={updateUserProfileData}
             >
               Save Information
             </button>
