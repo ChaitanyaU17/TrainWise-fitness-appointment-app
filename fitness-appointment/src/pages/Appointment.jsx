@@ -1,18 +1,18 @@
 // import React from 'react'
 
 import { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
 import { assets } from "../assets/assets";
 import RelatedTrainers from "../components/RelatedTrainers";
-
-import { ToastContainer, toast } from "react-toastify";
+import {toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import LazyLoad from "react-lazyload";
+import axios from "axios";
 
 const Appointment = () => {
   const { trainerId } = useParams();
-  const { trainers, currencySymbol } = useContext(AppContext);
+  const { trainers, currencySymbol, backendUrl, token, getTrainersData } = useContext(AppContext);
   const daysOfWeek = ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"];
 
   const [trainerInfo, setTrainerInfo] = useState(null);
@@ -20,6 +20,7 @@ const Appointment = () => {
   const [trainerSlots, setTrainerSlots] = useState([]);
   const [slotIndex, setSlotIndex] = useState(0);
   const [slotTime, setSlotTime] = useState("");
+  const navigate = useNavigate();
 
   const fetchTrainerInfo = async () => {
     const trainerInfo = trainers.find((trainer) => trainer._id === trainerId);
@@ -75,6 +76,37 @@ const Appointment = () => {
     }
   };
 
+  const bookAppointment = async () => {
+    if (!token) {
+      toast.warn('Login to book appointment');
+      return navigate('/login');
+    }
+
+    try {
+      const date = trainerSlots[slotIndex][0].datetime;
+
+      let day = date.getDate();
+      let month = date.getMonth()+1;
+      let year = date.getFullYear();
+
+      const slotDate = day + "_" + month + "_" + year;
+
+      const {data} = await axios.post(backendUrl + '/api/user/book-appointment', {trainerId, slotDate, slotTime}, {headers: {token}});
+      console.log(data);
+      if (data.success) {
+        toast.success(data.message);
+        getTrainersData();
+        navigate('/my-appointments');
+      } else {
+        toast.error(data.message);
+      }
+
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+    }
+  }
+
   useEffect(() => {
     fetchTrainerInfo();
   }, [trainers, trainerId]);
@@ -87,13 +119,13 @@ const Appointment = () => {
     console.log(trainerSlots);
   }, [trainerSlots]);
 
-  const handleBooking = () => {
-    if (slotTime) {
-      toast.success("Appointment booked successfully!");
-    } else {
-      toast.error("Please select a time slot.");
-    }
-  };
+  // const handleBooking = () => {
+  //   if (slotTime) {
+  //     toast.success("Appointment booked successfully!");
+  //   } else {
+  //     toast.error("Please select a time slot.");
+  //   }
+  // };
 
   return (
     trainerInfo && (
@@ -192,12 +224,11 @@ const Appointment = () => {
               ))}
           </div>
           <button
-            onClick={() => handleBooking()}
+            onClick={bookAppointment}
             className="bg-primary text-white text-sm font-light px-14 py-3 rounded-full my-6"
           >
             Book an Appointment
           </button>
-          <ToastContainer />
         </div>
 
         {/* --- listing related Trainers --- */}
