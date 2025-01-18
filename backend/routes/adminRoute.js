@@ -1,5 +1,5 @@
 import express from 'express';
-import { addTrainer, allTrainers, loginAdmin } from '../controllers/adminController.js';
+import { addTrainer, allTrainers, loginAdmin, appointmentAdmin } from '../controllers/adminController.js';
 import upload from '../middlewares/multer.js';
 import authAdmin from '../middlewares/authAdmin.js';
 import { changeAvailability } from '../controllers/trainerController.js';
@@ -10,5 +10,6 @@ adminRouter.post('/add-trainer', authAdmin , upload.single('image'), addTrainer)
 adminRouter.post('/login', loginAdmin );
 adminRouter.post('/all-trainers', authAdmin, allTrainers );
 adminRouter.post('/change-availability', authAdmin, changeAvailability );
+adminRouter.get('/appointments', authAdmin, appointmentAdmin);
 
 export default adminRouter;
