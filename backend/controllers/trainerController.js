@@ -2,9 +2,9 @@ import trainerModel from "../models/trainerModel.js";
 
 const changeAvailability = async (req, res) => {
     try {
-        const {docId} = req.body;
-        const docData = await trainerModel.findById(docId);
-        await trainerModel.findByIdAndUpdate(docId, {available: !docData.available});
+        const {trainerId} = req.body;
+        const trainerData = await trainerModel.findById(trainerId);
+        await trainerModel.findByIdAndUpdate(trainerId, {available: !trainerData.available});
         res.json({success:true, message: 'Availability Changed'})
     } catch (error) {
         console.log(error);
