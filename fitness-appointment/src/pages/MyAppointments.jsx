@@ -39,7 +39,6 @@ const MyAppointments = () => {
       const { data } = await axios.get(backendUrl + "/api/user/appointments", {
         headers: { token },
       });
-      console.log(data);
       if (data.success) {
         setAppointments(data.appointments.reverse());
       }
@@ -89,6 +88,7 @@ const MyAppointments = () => {
           if (data.success) {
             navigate("/my-appointments");
             getUserAppointments(); // This will fetch updated appointments
+            console.log(getUserAppointments());
           }
         } catch (error) {
           console.log(error);
