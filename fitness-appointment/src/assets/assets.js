@@ -1,4 +1,4 @@
-import Trainer1 from './Trainer1.jpg'
+
 import Trainer2 from './Trainer2.jpg'
 import Trainer3 from './Trainer3.jpg'
 import Trainer4 from './Trainer4.jpg'
@@ -92,7 +92,7 @@ export const trainers = [
     {
         _id: 'trainer1',
         name: 'Amara Patel',
-        image: Trainer1,
+        image: '',
         speciality: 'Evolve yoga',
         degree: 'Trainer',
         experience: '4 Years',
