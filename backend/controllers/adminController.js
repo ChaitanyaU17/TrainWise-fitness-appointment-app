@@ -4,6 +4,7 @@ import { v2 as cloudinary } from 'cloudinary';
 import trainerModel from '../models/trainerModel.js';
 import jwt from 'jsonwebtoken';
 import appointmentModel from '../models/appointmentModel.js';
+import userModel from '../models/userModel.js';
 
 // API for adding Trainer
 const addTrainer = async (req, res) => {
@@ -60,7 +61,6 @@ const addTrainer = async (req, res) => {
     }
 }
 
-
 // API for admin login
 const loginAdmin = async (req, res) => {
     try {
@@ -104,5 +104,55 @@ const appointmentAdmin = async (req, res) => {
     }
 }
 
-export { addTrainer, loginAdmin, allTrainers, appointmentAdmin };
+//API for appointment cancellation
+const appointmentCancle = async (req, res) => {
+    try {
+
+        const { appointmentId } = req.body
+        const appointmentData = await appointmentModel.findById(appointmentId)
+
+        await appointmentModel.findByIdAndUpdate(appointmentId, { cancelled: true })
+
+        // releasing trainer slot 
+        const { trainerId, slotDate, slotTime } = appointmentData
+
+        const trainerData = await trainerModel.findById(trainerId)
+
+        let slots_booked = trainerData.slots_booked
+
+        slots_booked[slotDate] = slots_booked[slotDate].filter(e => e !== slotTime)
+
+        await trainerModel.findByIdAndUpdate(trainerId, { slots_booked })
+
+        res.json({ success: true, message: 'Appointment Cancelled' })
+
+    } catch (error) {
+        console.log(error)
+        res.json({ success: false, message: error.message })
+    }
+}
+
+// API to get dashboard data for admin panel
+
+const adminDashboard = async (req, res) => {
+    try {
+        const trainers = await trainerModel.find({});
+        const users = await userModel.find({});
+        const appointments = await appointmentModel.find({});
+
+        const dashData = {
+            trainers: trainers.length,
+            appointments: appointments.length,
+            patients: users.length,
+            latestAppointments: appointments.reverse().slice(0,5)
+        }
+
+        res.json({success: true, dashData});
+    } catch (error) {
+        console.log(error)
+        res.json({ success: false, message: error.message })
+    }
+}
+
+export { addTrainer, loginAdmin, allTrainers, appointmentAdmin, appointmentCancle, adminDashboard };
  
