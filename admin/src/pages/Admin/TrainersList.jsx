@@ -8,6 +8,7 @@ const TrainersList = () => {
   useEffect(() => {
     if(aToken) {
       getAllTrainers();
+      console.log(getAllTrainers());
     }
   }, [aToken])
   return (
